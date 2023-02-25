@@ -23,7 +23,6 @@ export class AppComponent implements OnInit {
     this.http.post<{name:string}>('http://localhost/file.php', postData).subscribe(userData => {
       console.log(userData);
       this.onFetchPosts();
-      console.log(userData);
     })
     
   }
@@ -47,7 +46,6 @@ export class AppComponent implements OnInit {
   }
 
   onClearPosts() {
-    // Send Http request
   }
 }
 function subscribe(arg0: (userData: any) => void) {
