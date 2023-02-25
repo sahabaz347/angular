@@ -23,6 +23,7 @@ export class AppComponent implements OnInit {
     this.http.post<{name:string}>('http://localhost/file.php', postData).subscribe(userData => {
       console.log(userData);
       this.onFetchPosts();
+      console.log(userData);
     })
     
   }
