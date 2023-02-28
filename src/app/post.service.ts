@@ -24,10 +24,15 @@ export class PostService {
       const postArray = []
       for (const key in responseData) {
         if (responseData.hasOwnProperty(key)) {
-          postArray.push({ ...responseData[key], id: key });
+          postArray.push({ ...responseData[key]});//, id: key 
         }
       }
       return postArray;
     }))
+  }
+  deletePost(index:number) {
+    this.http.get<{ name: string }>('http://localhost/delete.php?action='+index).subscribe(userData => {
+      console.log(userData);
+    })
   }
 }

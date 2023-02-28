@@ -33,10 +33,16 @@ export class AppComponent implements OnInit {
     this.postService.fetchPost().subscribe(userData => {
       this.isFetching = false;
       this.loadedPosts = userData;
+      // console.log(userData);
     })
   }
 
-  onClearPosts() {
+  onClearPosts(index:number) {
+    this.postService.deletePost(index);
+    setTimeout(() => {
+      this.fetchData();
+    }, 100);
+    
   }
 }
 function subscribe(arg0: (userData: any) => void) {

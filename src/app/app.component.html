@@ -23,7 +23,7 @@
         Fetch Posts
       </button>
       |
-      <button class="btn btn-danger" [disabled]="loadedPosts.length < 1" (click)="onClearPosts()">
+      <button class="btn btn-danger" [disabled]="loadedPosts.length < 1" (click)="onClearPosts(1)">
         Clear Posts
       </button>
     </div>
@@ -33,9 +33,11 @@
       <p *ngIf="loadedPosts.length<1 && !isFetching">No posts available!</p>
       <a style="cursor: pointer;" class="list-group-item" routerLinkActive="active">
         <div class="row" *ngIf="loadedPosts.length>=1 && !isFetching">
-          <div class="col-md-8" *ngFor="let loadedPost of loadedPosts">
-            <h4 class="list-group-item-heading">{{loadedPost.title}} </h4>
-            <p class="list-group-item-text">{{loadedPost.content}}</p>
+          <div class="col-md-8" *ngFor="let loadedPost of loadedPosts; let i=index">
+            <a (click)="onClearPosts(loadedPost.id)">
+              <h4 class="list-group-item-heading">{{loadedPost.title}} </h4>
+              <p class="list-group-item-text">{{loadedPost.content}}</p>
+            </a>
           </div>
         </div>
         <p *ngIf="isFetching">Loading.....</p>
