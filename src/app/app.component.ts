@@ -1,52 +1,74 @@
-import { Component, DoCheck, OnInit } from '@angular/core';
+import { Component, DoCheck, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Post } from './post.model';
+import { PostService } from './post.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
-  loadedPosts = [];
+export class AppComponent implements OnInit,OnDestroy {
+  loadedPosts: Post[] = [];
+  isFetching: boolean;
+  error=null;
+private errorSub:Subscription
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private postService: PostService) { }
 
   ngOnInit() {
-    this.onFetchPosts();
+    this.errorSub=this.postService.error.subscribe(errorMessage=>{
+this.error=errorMessage;
+    })
+    this.fetchData();
   }
 
   onCreatePost(postData: Post) {
-    // Send Http request
-    // console.log(postData);
-    this.http.post<{name:string}>('http://localhost/file.php', postData).subscribe(userData => {
-      console.log(userData);
-      this.onFetchPosts();
-    })
-    
+    this.postService.createAndStorePost(postData);
+    setTimeout(() => {
+      this.fetchData();
+    }, 100);
+
   }
 
   onFetchPosts() {
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    this.http.get('http://localhost/get.php').pipe(map(responseData => {
-      const postArray = []
-      for (const key in responseData) {
-        if (responseData.hasOwnProperty(key)) {
-          postArray.push({ ...responseData[key], id: key });
-        }
-      }
-      return postArray;
-    })).subscribe(userData => {
-      this.loadedPosts=userData;
-    });
-    
+    this.fetchData();
 
   }
+  fetchData() {
+    this.isFetching = true;
+    this.postService.fetchPost().subscribe(userData => {
+      this.isFetching = false;
+      this.loadedPosts = userData;
+      // console.log(userData);
+    },error=>{
+      this.isFetching = false;
+      this.error=error.message;
+      console.log(error)
+    })
+  }
+  handleError(){
+    this.error=null;
+  }
 
+  onClearPost(index:number) {
+    this.postService.deletePost(index);
+    setTimeout(() => {
+      this.fetchData();
+    }, 100);
+    
+  }
   onClearPosts() {
-    // Send Http request
+    this.postService.deletePosts();
+    setTimeout(() => {
+      this.fetchData();
+    }, 100);
+    
+  }
+  ngOnDestroy(){
+    this.errorSub.unsubscribe();
   }
 }
 function subscribe(arg0: (userData: any) => void) {
