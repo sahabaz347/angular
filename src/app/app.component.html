@@ -41,11 +41,11 @@
           </div>
         </div>
         <p *ngIf="isFetching && !error">Loading.....</p>
-        <div class="alert alert-danger" *ngIf="error">
-<h1>Could not fetch data!</h1>
-<p>{{error}}</p>
-<button class="btn btn-danger" (click)="handleError()">Okay</button>
-        </div>
+        <!-- <div class="alert alert-danger" *ngIf="error">
+          <h1>Could not fetch data!</h1>
+          <p>{{error}}</p>
+          <button class="btn btn-danger" (click)="handleError()">Okay</button>
+        </div> -->
       </a>
     </div>
   </div>

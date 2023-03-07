@@ -15,11 +15,19 @@ error=new Subject<string>();
 
 
   createAndStorePost(postData: Post) {
-    this.http.post<{ name: string }>('http://localhost/file.php', postData).subscribe(userData => {
-      console.log(userData);
-    },error=>{
-      this.error.next(error.message)
-    })
+    this.http.post<{ name: string }>('http://localhost/file.php', postData,{
+      observe:'response'
+    }).subscribe(userData => {
+      console.log('werwerw------->'+userData);
+      console.log(11111111)
+    }
+    // ,error=>{
+    //   this.error.next(error.message)
+    //   console.log(11111111)
+
+    // }
+    )
+
   }
 
   fetchPost() {

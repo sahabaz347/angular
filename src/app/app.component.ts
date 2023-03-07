@@ -26,7 +26,7 @@ this.error=errorMessage;
   }
 
   onCreatePost(postData: Post) {
-    this.postService.createAndStorePost(postData)
+    this.postService.createAndStorePost(postData);
     setTimeout(() => {
       this.fetchData();
     }, 100);
